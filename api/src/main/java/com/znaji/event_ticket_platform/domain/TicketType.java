@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
@@ -18,6 +19,15 @@ public class TicketType {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Column(nullable = false)
+    private String name;
+
+    @Column(nullable = false, precision = 6, scale = 4)
+    private BigDecimal price;
+
+    private int maxQuantity;
+
+    private int soldQuantity;
 
 
     @ManyToOne(fetch = FetchType.LAZY)
