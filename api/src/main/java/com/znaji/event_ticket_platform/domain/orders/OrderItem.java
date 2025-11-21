@@ -21,8 +21,8 @@ public class OrderItem {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(name = "ticket_type", nullable = false)
-    private UUID ticketType;
+    @Column(name = "ticket_type_id", nullable = false)
+    private UUID ticketTypeId;
 
     @Column(name = "ticket_type_name", nullable = false)
     private String ticketTypeName;
@@ -32,6 +32,9 @@ public class OrderItem {
 
     @Column(name = "unit_price", nullable = false, precision = 10, scale = 2)
     private BigDecimal unitPrice;
+
+    @Column(name = "sub_total", nullable = false, precision = 10, scale = 2)
+    private BigDecimal subTotal;
 
 
     @ManyToOne(fetch = FetchType.LAZY)
