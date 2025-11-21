@@ -1,4 +1,4 @@
-package com.znaji.event_ticket_platform.domain;
+package com.znaji.event_ticket_platform.domain.events;
 
 public enum EventStatus {
     DRAFT,

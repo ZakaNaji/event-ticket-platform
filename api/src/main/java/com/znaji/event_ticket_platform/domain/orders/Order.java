@@ -1,4 +1,4 @@
-package com.znaji.event_ticket_platform.domain;
+package com.znaji.event_ticket_platform.domain.orders;
 
 import jakarta.persistence.*;
 import lombok.*;
