@@ -40,7 +40,7 @@ public class Event {
     @Column(nullable = false)
     private EventStatus status;
 
-    @OneToMany(mappedBy = "event", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "event", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Getter(AccessLevel.NONE) @Setter(AccessLevel.NONE)
     private List<TicketType> ticketTypes = new ArrayList<>();
 
