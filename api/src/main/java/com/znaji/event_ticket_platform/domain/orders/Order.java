@@ -21,6 +21,9 @@ public class Order {
     @Column(name = "attendee_id", nullable = false)
     private UUID attendeeId;
 
+    @Column(name = "event_id", nullable = false)
+    private UUID eventId;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private OrderStatus status;
