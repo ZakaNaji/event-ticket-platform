@@ -22,15 +22,17 @@ public class TicketType {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false, precision = 6, scale = 4)
+    @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
 
+    @Column(nullable = false, name = "max_quantity")
     private int maxQuantity;
 
+    @Column(nullable = false, name = "sold_quantity")
     private int soldQuantity;
 
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "event")
+    @JoinColumn(name = "event_id")
     private Event event;
 }
