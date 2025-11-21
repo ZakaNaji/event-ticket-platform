@@ -18,8 +18,8 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(name = "organizer", nullable = false)
-    private UUID organizer;
+    @Column(name = "organizer_id", nullable = false)
+    private UUID organizerId;
 
     @Column(nullable = false)
     private String name;
@@ -42,6 +42,7 @@ public class Event {
 
     @OneToMany(mappedBy = "event", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Getter(AccessLevel.NONE) @Setter(AccessLevel.NONE)
+    @OrderBy("price ASC")
     private List<TicketType> ticketTypes = new ArrayList<>();
 
     public List<TicketType> getTicketTypes() {
@@ -53,7 +54,7 @@ public class Event {
         ticketType.setEvent(this);
     }
 
-    public void removeEventType(TicketType type) {
+    public void removeTicketType(TicketType type) {
         ticketTypes.remove(type);
         type.setEvent(null);
     }
