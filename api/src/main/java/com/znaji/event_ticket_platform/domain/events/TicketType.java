@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
-@Table(name = "ticket_type")
+@Table(name = "ticket_types")
 @AllArgsConstructor @NoArgsConstructor
 @Getter @Setter
 public class TicketType {
@@ -19,7 +19,7 @@ public class TicketType {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 200)
     private String name;
 
     @Column(nullable = false, precision = 10, scale = 2)
