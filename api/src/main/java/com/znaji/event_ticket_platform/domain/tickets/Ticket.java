@@ -28,7 +28,7 @@ public class Ticket {
     @Column(name = "ticket_type_id", nullable = false)
     private UUID ticketTypeId;
 
-    @Column(nullable = false)
+    @Column(name = "ticket_type_name", nullable = false)
     private String ticketTypeName;
 
     @Column(nullable = false, precision = 10, scale = 2)

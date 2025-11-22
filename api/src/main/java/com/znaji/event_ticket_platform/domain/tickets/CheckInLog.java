@@ -22,10 +22,10 @@ public class CheckInLog {
     @Column(name = "ticket_id", nullable = false)
     private UUID ticketId; //OR SHOULD THIS BE AN EMBEDDED OBJECT?
 
-    @Column(name = "stuff_id", nullable = false)
-    private UUID stuffId;
+    @Column(name = "staff_id", nullable = false)
+    private UUID staffId;
 
-    @Column(nullable = false)
+    @Column(name = "scan_time", nullable = false)
     private LocalDateTime scanTime;
 
     @Enumerated(EnumType.STRING)
