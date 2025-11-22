@@ -21,7 +21,7 @@ public class Event {
     @Column(name = "organizer_id", nullable = false)
     private UUID organizerId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 200)
     private String name;
 
     @Column(length = 2000)
@@ -33,7 +33,7 @@ public class Event {
     @Column(name = "end_date", nullable = false)
     private LocalDateTime end;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 250)
     private String venue;
 
     @Enumerated(EnumType.STRING)
