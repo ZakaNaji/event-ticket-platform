@@ -3,6 +3,7 @@ package com.znaji.event_ticket_platform.domain.events;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,15 +50,6 @@ public class Event {
         return List.copyOf(ticketTypes);
     }
 
-    public void addTicketType(TicketType ticketType) {
-        ticketTypes.add(ticketType);
-        ticketType.setEvent(this);
-    }
-
-    public void removeTicketType(TicketType type) {
-        ticketTypes.remove(type);
-        type.setEvent(null);
-    }
 
     //lifecycle methods:
     public void publish() {
@@ -108,5 +100,67 @@ public class Event {
     public boolean isEditable() {
         return this.status == EventStatus.DRAFT;
     }
-    
+
+    // TicketType rules inside the Event aggregate
+
+    public void addTicketType(TicketType ticketType) {
+        if (!isEditable()) {
+            throw new IllegalStateException("Cannot add ticket types unless event is in DRAFT");
+        }
+
+        if (ticketType.getPrice().compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("Price cannot be negative");
+        }
+
+        if (ticketType.getMaxQuantity() <= 0) {
+            throw new IllegalArgumentException("Max quantity must be > 0");
+        }
+
+        ticketTypes.add(ticketType);
+        ticketType.setEvent(this);
+    }
+
+    public void updateTicketType(
+            TicketType ticketType,
+            String newName,
+            BigDecimal newPrice,
+            int newMaxQuantity
+    ) {
+        if (!isEditable()) {
+            throw new IllegalStateException("Cannot modify ticket types after publishing");
+        }
+
+        if (newPrice.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("Price cannot be negative");
+        }
+
+        if (newMaxQuantity <= 0) {
+            throw new IllegalArgumentException("Max quantity must be > 0");
+        }
+
+        if (newMaxQuantity < ticketType.getSoldQuantity()) {
+            throw new IllegalArgumentException(
+                    "Cannot reduce max quantity below already sold quantity"
+            );
+        }
+
+        ticketType.updateName(newName);
+        ticketType.updatePrice(newPrice);
+        ticketType.updateMaxQuantity(newMaxQuantity);
+    }
+
+    public void removeTicketType(TicketType type) {
+        if (!isEditable()) {
+            throw new IllegalStateException("Cannot remove ticket types after publishing");
+        }
+
+        if (!type.canDelete()) {
+            throw new IllegalStateException(
+                    "Cannot delete a ticket type that has already sold tickets"
+            );
+        }
+
+        ticketTypes.remove(type);
+        type.setEvent(null);
+    }
 }
