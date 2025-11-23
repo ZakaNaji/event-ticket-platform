@@ -59,5 +59,54 @@ public class Event {
         type.setEvent(null);
     }
 
+    //lifecycle methods:
+    public void publish() {
+        if (ticketTypes.isEmpty()) {
+            throw new IllegalStateException("An event must have at least one ticket type to be published");
+        }
+
+        if (start.isBefore(LocalDateTime.now())) {
+            throw new IllegalStateException("Cannot publish an event that already started");
+        }
+
+        if (!end.isAfter(start)) {
+            throw new IllegalStateException("Event end time must be after start time");
+        }
+
+        if (status != EventStatus.DRAFT) {
+            throw new IllegalStateException("Only events in DRAFT state can be published");
+        }
+        this.status = EventStatus.PUBLISHED;
+    }
+
+    public void close() {
+        if (status != EventStatus.PUBLISHED) {
+            throw new IllegalStateException("Only Published events can be closed");
+        }
+
+        if (end.isAfter(LocalDateTime.now())) {
+            throw new IllegalStateException("Cannot close event before it finishes");
+        }
+
+        this.status = EventStatus.CLOSED;
+    }
+
+    public void cancel() {
+        if (status == EventStatus.CLOSED || status == EventStatus.ARCHIVED) {
+            throw new IllegalStateException("Cannot cancel an event that already completed");
+        }
+        this.status = EventStatus.CANCELLED;
+    }
+
+    public void archive() {
+        if (status != EventStatus.CLOSED) {
+            throw new IllegalStateException("Only closed events can be archived");
+        }
+        this.status = EventStatus.ARCHIVED;
+    }
+
+    public boolean isEditable() {
+        return this.status == EventStatus.DRAFT;
+    }
     
 }

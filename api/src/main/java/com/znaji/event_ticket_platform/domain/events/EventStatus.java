@@ -4,5 +4,6 @@ public enum EventStatus {
     DRAFT,
     PUBLISHED,
     CLOSED,
+    CANCELLED,
     ARCHIVED
 }
