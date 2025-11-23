@@ -35,4 +35,41 @@ public class TicketType {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_id")
     private Event event;
+
+    public void updateName(String name) {
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("Ticket type name cannot be empty");
+        }
+        this.name = name;
+    }
+
+    public void updatePrice(BigDecimal price) {
+        if (price == null || price.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("Price cannot be negative");
+        }
+        this.price = price;
+    }
+
+    public void updateMaxQuantity(int max) {
+        if (max <= 0) {
+            throw new IllegalArgumentException("Max quantity must be > 0");
+        }
+        this.maxQuantity = max;
+    }
+
+    public void increaseSoldQuantity(int qty) {
+        if (qty <= 0) {
+            throw new IllegalArgumentException("Quantity must be > 0");
+        }
+
+        if (this.soldQuantity + qty > maxQuantity) {
+            throw new IllegalStateException("Not enough tickets available");
+        }
+
+        this.soldQuantity += qty;
+    }
+
+    public boolean canDelete() {
+        return this.soldQuantity == 0;
+    }
 }
