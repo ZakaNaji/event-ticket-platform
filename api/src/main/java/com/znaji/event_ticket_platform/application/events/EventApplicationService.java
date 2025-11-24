@@ -1,6 +1,7 @@
 package com.znaji.event_ticket_platform.application.events;
 
 import com.znaji.event_ticket_platform.api.events.EventResponse;
+import com.znaji.event_ticket_platform.api.events.TicketTypeResponse;
 import com.znaji.event_ticket_platform.common.mapping.events.EventMapper;
 import com.znaji.event_ticket_platform.domain.events.Event;
 import com.znaji.event_ticket_platform.domain.events.TicketType;
@@ -9,6 +10,7 @@ import com.znaji.event_ticket_platform.infrastructure.persistence.events.TicketT
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -86,6 +88,14 @@ public class EventApplicationService {
         return EventMapper.toResponse(event);
     }
 
+    public List<TicketTypeResponse> findTicketTypesForEvent(UUID eventId) {
+        List<TicketType> allByEventId = ticketTypeRepository.findAllByEventId(eventId);
+
+        return allByEventId.stream()
+                .map(EventMapper::toTicketTypeResponse)
+                .toList();
+    }
+
 
     private TicketType findTicketType(UUID typeId, Event event) {
         return event.getTicketTypes().stream()
@@ -98,4 +108,5 @@ public class EventApplicationService {
         return eventRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Event not found: " + id));
     }
+
 }

@@ -111,7 +111,7 @@ public final class EventMapper {
         );
     }
 
-    private static TicketTypeResponse toTicketTypeResponse(TicketType ticketType) {
+    public static TicketTypeResponse toTicketTypeResponse(TicketType ticketType) {
         if (ticketType == null) {
             return null;
         }

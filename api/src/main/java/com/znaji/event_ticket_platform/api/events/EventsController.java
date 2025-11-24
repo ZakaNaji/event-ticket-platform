@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -24,6 +25,12 @@ public class EventsController {
     public ResponseEntity<EventResponse> getEventById(@PathVariable UUID eventId) {
         EventResponse response = eventApplicationService.findEventById(eventId);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{eventId}/ticket-types")
+    public ResponseEntity<List<TicketTypeResponse>> getAllTypeForAnEvent(@PathVariable UUID eventId) {
+        List<TicketTypeResponse> typeResponses = eventApplicationService.findTicketTypesForEvent(eventId);
+        return ResponseEntity.ok(typeResponses);
     }
 
     @PostMapping()
