@@ -4,6 +4,7 @@ import com.znaji.event_ticket_platform.application.events.*;
 import com.znaji.event_ticket_platform.common.mapping.events.EventMapper;
 import com.znaji.event_ticket_platform.domain.events.EventStatus;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -32,15 +33,15 @@ public class EventsController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<EventResponse>> filterEvents(
+    public ResponseEntity<Page<EventResponse>> filterEvents(
             @RequestParam(value = "fromDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fromDate,
             @RequestParam(value = "toDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime toDate,
             @RequestParam(value = "status", required = false)EventStatus status,
-            @RequestParam(value = "organierId", required = false) UUID organizerId,
+            @RequestParam(value = "organizerId", required = false) UUID organizerId,
             Pageable pageable
             ) {
         EventFilterCommand eventFilterCommand = new EventFilterCommand(fromDate, toDate, status, organizerId);
-        List<EventResponse> eventResponses = eventApplicationService.filterEvents(eventFilterCommand, pageable);
+        Page<EventResponse> eventResponses = eventApplicationService.filterEvents(eventFilterCommand, pageable);
         return ResponseEntity.ok(eventResponses);
     }
 

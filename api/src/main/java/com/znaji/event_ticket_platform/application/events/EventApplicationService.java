@@ -78,7 +78,7 @@ public class EventApplicationService {
 
     public void cancel(EventIdCommand cmd) {
         Event event = loadEvent(cmd.eventId());
-        event.close();
+        event.cancel();
         eventRepository.save(event);
     }
 
@@ -106,7 +106,7 @@ public class EventApplicationService {
         eventRepository.save(event);
     }
 
-    public List<EventResponse> filterEvents(EventFilterCommand cmd, Pageable pageable) {
+    public Page<EventResponse> filterEvents(EventFilterCommand cmd, Pageable pageable) {
         if (cmd.fromDate() != null && cmd.toDate() != null) {
             if (cmd.fromDate().isAfter(cmd.toDate())) {
                 throw new IllegalArgumentException("fromDate cannot be after toDate");
@@ -117,10 +117,8 @@ public class EventApplicationService {
             throw new IllegalArgumentException("Page size too large");
         }
         Page<Event> filteredEvents = eventRepository.findAll(EventSpecification.apply(cmd), pageable);
-        return filteredEvents.getContent()
-                .stream()
-                .map(EventMapper::toResponse)
-                .toList();
+        return filteredEvents.
+                map(EventMapper::toResponse);
     }
 
 

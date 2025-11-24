@@ -18,7 +18,7 @@ public class EventSpecification {
             }
 
             if (cmd.fromDate() != null) {
-                predicates.add(criteriaBuilder.greaterThan(root.get("start"), cmd.fromDate()));
+                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("start"), cmd.fromDate()));
             }
 
             if (cmd.toDate() != null)
