@@ -1,5 +1,6 @@
 package com.znaji.event_ticket_platform.application.events;
 
+import com.znaji.event_ticket_platform.common.mapping.events.EventMapper;
 import com.znaji.event_ticket_platform.domain.events.Event;
 import com.znaji.event_ticket_platform.domain.events.TicketType;
 import com.znaji.event_ticket_platform.infrastructure.persistence.events.EventRepository;
