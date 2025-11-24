@@ -3,6 +3,7 @@ package com.znaji.event_ticket_platform.api.events;
 import com.znaji.event_ticket_platform.application.events.AddTicketTypeCommand;
 import com.znaji.event_ticket_platform.application.events.CreateEventCommand;
 import com.znaji.event_ticket_platform.application.events.EventApplicationService;
+import com.znaji.event_ticket_platform.application.events.UpdateTicketTypeCommand;
 import com.znaji.event_ticket_platform.common.mapping.events.EventMapper;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -36,5 +37,15 @@ public class EventsController {
         AddTicketTypeCommand cmd = EventMapper.toCommand(eventId, request);
         eventApplicationService.addTicketType(cmd);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PutMapping("/{eventId}/ticket-types/{ticketTypeId}")
+    public ResponseEntity<Void> updateTicketType(@PathVariable("eventId") UUID eventId,
+                                                 @PathVariable("ticketTypeId") UUID ticketTypeId,
+                                                 @Valid @RequestBody UpdateTicketTypeRequest request) {
+
+        UpdateTicketTypeCommand cmd = EventMapper.toCommand(eventId, ticketTypeId, request);
+        eventApplicationService.updateTicketType(cmd);
+        return ResponseEntity.noContent().build();
     }
 }

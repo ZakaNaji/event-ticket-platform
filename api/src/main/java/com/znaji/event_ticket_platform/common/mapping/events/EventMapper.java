@@ -2,8 +2,10 @@ package com.znaji.event_ticket_platform.common.mapping.events;
 
 import com.znaji.event_ticket_platform.api.events.AddTicketTypeRequest;
 import com.znaji.event_ticket_platform.api.events.CreateEventRequest;
+import com.znaji.event_ticket_platform.api.events.UpdateTicketTypeRequest;
 import com.znaji.event_ticket_platform.application.events.AddTicketTypeCommand;
 import com.znaji.event_ticket_platform.application.events.CreateEventCommand;
+import com.znaji.event_ticket_platform.application.events.UpdateTicketTypeCommand;
 import com.znaji.event_ticket_platform.domain.events.Event;
 import com.znaji.event_ticket_platform.domain.events.EventStatus;
 import com.znaji.event_ticket_platform.domain.events.TicketType;
@@ -66,6 +68,24 @@ public final class EventMapper {
 
         return new AddTicketTypeCommand(
                 eventId,
+                request.name(),
+                request.price(),
+                request.maxQuantity()
+        );
+    }
+
+    public static UpdateTicketTypeCommand toCommand(
+            UUID eventId,
+            UUID ticketTypeId,
+            UpdateTicketTypeRequest request
+    ) {
+        if (request == null) {
+            return null;
+        }
+
+        return new UpdateTicketTypeCommand(
+                eventId,
+                ticketTypeId,
                 request.name(),
                 request.price(),
                 request.maxQuantity()
