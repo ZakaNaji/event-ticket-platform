@@ -47,6 +47,15 @@ public class EventApplicationService {
         eventRepository.save(event);
     }
 
+    public void removeTicketType(UUID eventId, UUID ticketTypeId) {
+        Event event = loadEvent(eventId);
+        TicketType ticketType = findTicketType(ticketTypeId, event);
+
+        event.removeTicketType(ticketType);
+
+        eventRepository.save(event);
+    }
+
     private TicketType findTicketType(UUID typeId, Event event) {
         return event.getTicketTypes().stream()
                 .filter(type -> type.getId().equals(typeId))
