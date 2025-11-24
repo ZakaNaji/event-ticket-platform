@@ -48,4 +48,13 @@ public class EventsController {
         eventApplicationService.updateTicketType(cmd);
         return ResponseEntity.noContent().build();
     }
+
+    @DeleteMapping("/{eventId}/ticket-types/{ticketTypeId}")
+    public ResponseEntity<Void> deleteTicketType(
+            @PathVariable UUID eventId,
+            @PathVariable UUID ticketTypeId
+    ) {
+        eventApplicationService.removeTicketType(eventId, ticketTypeId);
+        return ResponseEntity.noContent().build();
+    }
 }
