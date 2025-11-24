@@ -20,6 +20,12 @@ public class EventsController {
         this.eventApplicationService = eventApplicationService;
     }
 
+    @GetMapping("/{eventId}")
+    public ResponseEntity<EventResponse> getEventById(@PathVariable UUID eventId) {
+        EventResponse response = eventApplicationService.findEventById(eventId);
+        return ResponseEntity.ok(response);
+    }
+
     @PostMapping()
     public ResponseEntity<UUID> createEvent(@Valid @RequestBody CreateEventRequest request) {
         CreateEventCommand createEventCommand = EventMapper.toCommand(request);

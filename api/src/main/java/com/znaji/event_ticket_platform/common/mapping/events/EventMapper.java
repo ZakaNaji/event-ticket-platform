@@ -1,8 +1,6 @@
 package com.znaji.event_ticket_platform.common.mapping.events;
 
-import com.znaji.event_ticket_platform.api.events.AddTicketTypeRequest;
-import com.znaji.event_ticket_platform.api.events.CreateEventRequest;
-import com.znaji.event_ticket_platform.api.events.UpdateTicketTypeRequest;
+import com.znaji.event_ticket_platform.api.events.*;
 import com.znaji.event_ticket_platform.application.events.AddTicketTypeCommand;
 import com.znaji.event_ticket_platform.application.events.CreateEventCommand;
 import com.znaji.event_ticket_platform.application.events.UpdateTicketTypeCommand;
@@ -89,6 +87,41 @@ public final class EventMapper {
                 request.name(),
                 request.price(),
                 request.maxQuantity()
+        );
+    }
+
+    public static EventResponse toResponse(Event event) {
+        if (event == null) {
+            return null;
+        }
+
+        return new EventResponse(
+                event.getId(),
+                event.getOrganizerId(),
+                event.getName(),
+                event.getDescription(),
+                event.getStart(),
+                event.getEnd(),
+                event.getVenue(),
+                event.getStatus().name(),
+                event.getTicketTypes()
+                        .stream()
+                        .map(EventMapper::toTicketTypeResponse)
+                        .toList()
+        );
+    }
+
+    private static TicketTypeResponse toTicketTypeResponse(TicketType ticketType) {
+        if (ticketType == null) {
+            return null;
+        }
+
+        return new TicketTypeResponse(
+                ticketType.getId(),
+                ticketType.getName(),
+                ticketType.getPrice(),
+                ticketType.getMaxQuantity(),
+                ticketType.getSoldQuantity()
         );
     }
 }

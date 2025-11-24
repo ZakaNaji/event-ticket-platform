@@ -1,5 +1,6 @@
 package com.znaji.event_ticket_platform.application.events;
 
+import com.znaji.event_ticket_platform.api.events.EventResponse;
 import com.znaji.event_ticket_platform.common.mapping.events.EventMapper;
 import com.znaji.event_ticket_platform.domain.events.Event;
 import com.znaji.event_ticket_platform.domain.events.TicketType;
@@ -80,6 +81,11 @@ public class EventApplicationService {
         event.archive();
         eventRepository.save(event);
     }
+    public EventResponse findEventById(UUID eventId) {
+        Event event = loadEvent(eventId);
+        return EventMapper.toResponse(event);
+    }
+
 
     private TicketType findTicketType(UUID typeId, Event event) {
         return event.getTicketTypes().stream()
