@@ -3,18 +3,21 @@ package com.znaji.event_ticket_platform.application.events;
 import com.znaji.event_ticket_platform.domain.events.Event;
 import com.znaji.event_ticket_platform.domain.events.TicketType;
 import com.znaji.event_ticket_platform.infrastructure.persistence.events.EventRepository;
+import com.znaji.event_ticket_platform.infrastructure.persistence.events.TicketTypeRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 public class EventApplicationService {
     private final EventRepository eventRepository;
+    private final TicketTypeRepository ticketTypeRepository;
 
-    public EventApplicationService(EventRepository eventRepository) {
+    public EventApplicationService(EventRepository eventRepository, TicketTypeRepository ticketTypeRepository) {
         this.eventRepository = eventRepository;
+        this.ticketTypeRepository = ticketTypeRepository;
     }
 
     public UUID createEvent(CreateEventCommand cmd) {
@@ -29,6 +32,26 @@ public class EventApplicationService {
 
         event.addTicketType(type);
         eventRepository.save(event);
+    }
+
+    public void updateTicketType(UpdateTicketTypeCommand cmd) {
+        Event event = loadEvent(cmd.eventId());
+        TicketType ticketType = findTicketType(cmd.ticketTypeId(), event);
+
+        event.updateTicketType(
+                ticketType,
+                cmd.name(),
+                cmd.price(),
+                cmd.maxQuantity()
+        );
+        eventRepository.save(event);
+    }
+
+    private TicketType findTicketType(UUID typeId, Event event) {
+        return event.getTicketTypes().stream()
+                .filter(type -> type.getId().equals(typeId))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("TicketType not found: " + typeId));
     }
 
     private Event loadEvent(UUID id) {
