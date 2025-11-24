@@ -1,9 +1,6 @@
 package com.znaji.event_ticket_platform.api.events;
 
-import com.znaji.event_ticket_platform.application.events.AddTicketTypeCommand;
-import com.znaji.event_ticket_platform.application.events.CreateEventCommand;
-import com.znaji.event_ticket_platform.application.events.EventApplicationService;
-import com.znaji.event_ticket_platform.application.events.UpdateTicketTypeCommand;
+import com.znaji.event_ticket_platform.application.events.*;
 import com.znaji.event_ticket_platform.common.mapping.events.EventMapper;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -55,6 +52,30 @@ public class EventsController {
             @PathVariable UUID ticketTypeId
     ) {
         eventApplicationService.removeTicketType(eventId, ticketTypeId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("{eventId}/publish")
+    public ResponseEntity<Void> publishEvent(@PathVariable UUID eventId) {
+        eventApplicationService.publish(new EventIdCommand(eventId));
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("{eventId}/close")
+    public ResponseEntity<Void> closeEvent(@PathVariable UUID eventId) {
+        eventApplicationService.close(new EventIdCommand(eventId));
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("{eventId}/cancel")
+    public ResponseEntity<Void> cancelEvent(@PathVariable UUID eventId) {
+        eventApplicationService.cancel(new EventIdCommand(eventId));
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("{eventId}/archive")
+    public ResponseEntity<Void> archiveEvent(@PathVariable UUID eventId) {
+        eventApplicationService.archive(new EventIdCommand(eventId));
         return ResponseEntity.noContent().build();
     }
 }
