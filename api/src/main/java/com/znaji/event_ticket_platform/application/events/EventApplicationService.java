@@ -1,12 +1,16 @@
 package com.znaji.event_ticket_platform.application.events;
 
+import com.znaji.event_ticket_platform.api.events.EventFilterCommand;
 import com.znaji.event_ticket_platform.api.events.EventResponse;
 import com.znaji.event_ticket_platform.api.events.TicketTypeResponse;
 import com.znaji.event_ticket_platform.common.mapping.events.EventMapper;
 import com.znaji.event_ticket_platform.domain.events.Event;
 import com.znaji.event_ticket_platform.domain.events.TicketType;
 import com.znaji.event_ticket_platform.infrastructure.persistence.events.EventRepository;
+import com.znaji.event_ticket_platform.infrastructure.persistence.events.EventSpecification;
 import com.znaji.event_ticket_platform.infrastructure.persistence.events.TicketTypeRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -102,6 +106,23 @@ public class EventApplicationService {
         eventRepository.save(event);
     }
 
+    public List<EventResponse> filterEvents(EventFilterCommand cmd, Pageable pageable) {
+        if (cmd.fromDate() != null && cmd.toDate() != null) {
+            if (cmd.fromDate().isAfter(cmd.toDate())) {
+                throw new IllegalArgumentException("fromDate cannot be after toDate");
+            }
+        }
+
+        if (pageable.getPageSize() > 100) {
+            throw new IllegalArgumentException("Page size too large");
+        }
+        Page<Event> filteredEvents = eventRepository.findAll(EventSpecification.apply(cmd), pageable);
+        return filteredEvents.getContent()
+                .stream()
+                .map(EventMapper::toResponse)
+                .toList();
+    }
+
 
     private TicketType findTicketType(UUID typeId, Event event) {
         return event.getTicketTypes().stream()
@@ -114,6 +135,5 @@ public class EventApplicationService {
         return eventRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Event not found: " + id));
     }
-
 
 }

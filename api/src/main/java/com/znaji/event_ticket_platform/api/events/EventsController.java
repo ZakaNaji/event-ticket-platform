@@ -2,11 +2,16 @@ package com.znaji.event_ticket_platform.api.events;
 
 import com.znaji.event_ticket_platform.application.events.*;
 import com.znaji.event_ticket_platform.common.mapping.events.EventMapper;
+import com.znaji.event_ticket_platform.domain.events.EventStatus;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,6 +29,19 @@ public class EventsController {
     public ResponseEntity<EventResponse> getEventById(@PathVariable UUID eventId) {
         EventResponse response = eventApplicationService.findEventById(eventId);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping()
+    public ResponseEntity<List<EventResponse>> filterEvents(
+            @RequestParam(value = "fromDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fromDate,
+            @RequestParam(value = "toDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime toDate,
+            @RequestParam(value = "status", required = false)EventStatus status,
+            @RequestParam(value = "organierId", required = false) UUID organizerId,
+            Pageable pageable
+            ) {
+        EventFilterCommand eventFilterCommand = new EventFilterCommand(fromDate, toDate, status, organizerId);
+        List<EventResponse> eventResponses = eventApplicationService.filterEvents(eventFilterCommand, pageable);
+        return ResponseEntity.ok(eventResponses);
     }
 
     @GetMapping("/{eventId}/ticket-types")
