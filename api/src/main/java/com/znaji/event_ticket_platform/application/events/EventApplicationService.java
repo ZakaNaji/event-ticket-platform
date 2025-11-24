@@ -56,6 +56,30 @@ public class EventApplicationService {
         eventRepository.save(event);
     }
 
+    public void publish(EventIdCommand cmd) {
+        Event event = loadEvent(cmd.eventId());
+        event.publish();
+        eventRepository.save(event);
+    }
+
+    public void close(EventIdCommand cmd) {
+        Event event = loadEvent(cmd.eventId());
+        event.close();
+        eventRepository.save(event);
+    }
+
+    public void cancel(EventIdCommand cmd) {
+        Event event = loadEvent(cmd.eventId());
+        event.close();
+        eventRepository.save(event);
+    }
+
+    public void archive(EventIdCommand cmd) {
+        Event event = loadEvent(cmd.eventId());
+        event.archive();
+        eventRepository.save(event);
+    }
+
     private TicketType findTicketType(UUID typeId, Event event) {
         return event.getTicketTypes().stream()
                 .filter(type -> type.getId().equals(typeId))
