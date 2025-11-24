@@ -8,6 +8,5 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface EventRepository extends JpaRepository<Event, UUID> {
-    @Query("SELECT e FROM Event e JOIN FETCH e.ticketTypes ")
     Optional<Event> findById(UUID id);
 }
