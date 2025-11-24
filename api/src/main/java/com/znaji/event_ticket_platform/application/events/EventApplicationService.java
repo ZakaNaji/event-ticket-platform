@@ -96,6 +96,12 @@ public class EventApplicationService {
                 .toList();
     }
 
+    public void updateEvent(UpdateEventCommand cmd) {
+        Event event = loadEvent(cmd.eventId());
+        event.updateDetails(cmd.name(), cmd.description(), cmd.start(), cmd.end(), cmd.venue());
+        eventRepository.save(event);
+    }
+
 
     private TicketType findTicketType(UUID typeId, Event event) {
         return event.getTicketTypes().stream()
@@ -108,5 +114,6 @@ public class EventApplicationService {
         return eventRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Event not found: " + id));
     }
+
 
 }

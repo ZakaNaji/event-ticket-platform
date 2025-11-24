@@ -3,6 +3,7 @@ package com.znaji.event_ticket_platform.common.mapping.events;
 import com.znaji.event_ticket_platform.api.events.*;
 import com.znaji.event_ticket_platform.application.events.AddTicketTypeCommand;
 import com.znaji.event_ticket_platform.application.events.CreateEventCommand;
+import com.znaji.event_ticket_platform.application.events.UpdateEventCommand;
 import com.znaji.event_ticket_platform.application.events.UpdateTicketTypeCommand;
 import com.znaji.event_ticket_platform.domain.events.Event;
 import com.znaji.event_ticket_platform.domain.events.EventStatus;
@@ -122,6 +123,21 @@ public final class EventMapper {
                 ticketType.getPrice(),
                 ticketType.getMaxQuantity(),
                 ticketType.getSoldQuantity()
+        );
+    }
+
+    public static UpdateEventCommand toEVentUpdateCommand(UUID eventId, UpdateEventRequest request) {
+        if (request == null) {
+            return null;
+        }
+
+        return new UpdateEventCommand(
+                eventId,
+                request.name(),
+                request.description(),
+                request.start(),
+                request.end(),
+                request.venue()
         );
     }
 }

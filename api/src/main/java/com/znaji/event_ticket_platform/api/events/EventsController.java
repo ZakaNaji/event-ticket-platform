@@ -4,7 +4,6 @@ import com.znaji.event_ticket_platform.application.events.*;
 import com.znaji.event_ticket_platform.common.mapping.events.EventMapper;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,6 +38,16 @@ public class EventsController {
         UUID result = eventApplicationService.createEvent(createEventCommand);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(result);
+    }
+
+    @PutMapping("/{eventId}")
+    public ResponseEntity<Void> updateEvent(
+            @PathVariable UUID eventId,
+            @Valid @RequestBody UpdateEventRequest request) {
+
+        UpdateEventCommand eVentUpdateCommand = EventMapper.toEVentUpdateCommand(eventId, request);
+        eventApplicationService.updateEvent(eVentUpdateCommand);
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/{eventId}/ticket-types")

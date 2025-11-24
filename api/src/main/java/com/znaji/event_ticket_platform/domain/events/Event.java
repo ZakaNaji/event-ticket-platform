@@ -101,6 +101,27 @@ public class Event {
         return this.status == EventStatus.DRAFT;
     }
 
+    public void updateDetails(String name, String description, LocalDateTime start, LocalDateTime end, String venue) {
+
+        if (!isEditable()) {
+            throw new IllegalStateException("Event can be updated only in DRAFT state");
+        }
+
+        if (start.isBefore(LocalDateTime.now())) {
+            throw new IllegalStateException("Start date cannot be in the past");
+        }
+
+        if (!end.isAfter(start)) {
+            throw new IllegalStateException("Event end time must be after the start");
+        }
+
+        this.name = name;
+        this.description = description;
+        this.start = start;
+        this.end = end;
+        this.venue = venue;
+    }
+
     // TicketType rules inside the Event aggregate
 
     public void addTicketType(TicketType ticketType) {
