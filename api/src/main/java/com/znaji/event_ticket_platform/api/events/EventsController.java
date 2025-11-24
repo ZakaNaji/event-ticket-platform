@@ -30,5 +30,11 @@ public class EventsController {
                 .body(result);
     }
 
-    
+    @PostMapping("/{eventId}/ticket-types")
+    public ResponseEntity<Void> addTicketType(@PathVariable("eventId") UUID eventId,
+                                              @Valid @RequestBody AddTicketTypeRequest request) {
+        AddTicketTypeCommand cmd = EventMapper.toCommand(eventId, request);
+        eventApplicationService.addTicketType(cmd);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
 }
