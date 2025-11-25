@@ -1,4 +1,4 @@
-package com.znaji.event_ticket_platform.api.events;
+package com.znaji.event_ticket_platform.application.events.commands;
 
 import com.znaji.event_ticket_platform.domain.events.EventStatus;
 

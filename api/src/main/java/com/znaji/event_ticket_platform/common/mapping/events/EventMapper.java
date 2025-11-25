@@ -1,10 +1,10 @@
 package com.znaji.event_ticket_platform.common.mapping.events;
 
-import com.znaji.event_ticket_platform.api.events.*;
-import com.znaji.event_ticket_platform.application.events.AddTicketTypeCommand;
-import com.znaji.event_ticket_platform.application.events.CreateEventCommand;
-import com.znaji.event_ticket_platform.application.events.UpdateEventCommand;
-import com.znaji.event_ticket_platform.application.events.UpdateTicketTypeCommand;
+import com.znaji.event_ticket_platform.api.events.io.*;
+import com.znaji.event_ticket_platform.application.events.commands.AddTicketTypeCommand;
+import com.znaji.event_ticket_platform.application.events.commands.CreateEventCommand;
+import com.znaji.event_ticket_platform.application.events.commands.UpdateEventCommand;
+import com.znaji.event_ticket_platform.application.events.commands.UpdateTicketTypeCommand;
 import com.znaji.event_ticket_platform.domain.events.Event;
 import com.znaji.event_ticket_platform.domain.events.EventStatus;
 import com.znaji.event_ticket_platform.domain.events.TicketType;

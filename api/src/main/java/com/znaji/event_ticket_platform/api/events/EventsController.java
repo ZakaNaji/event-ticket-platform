@@ -1,6 +1,8 @@
 package com.znaji.event_ticket_platform.api.events;
 
+import com.znaji.event_ticket_platform.api.events.io.*;
 import com.znaji.event_ticket_platform.application.events.*;
+import com.znaji.event_ticket_platform.application.events.commands.*;
 import com.znaji.event_ticket_platform.common.mapping.events.EventMapper;
 import com.znaji.event_ticket_platform.domain.events.EventStatus;
 import jakarta.validation.Valid;

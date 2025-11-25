@@ -1,8 +1,8 @@
 package com.znaji.event_ticket_platform.application.events;
 
-import com.znaji.event_ticket_platform.api.events.EventFilterCommand;
-import com.znaji.event_ticket_platform.api.events.EventResponse;
-import com.znaji.event_ticket_platform.api.events.TicketTypeResponse;
+import com.znaji.event_ticket_platform.api.events.io.EventResponse;
+import com.znaji.event_ticket_platform.api.events.io.TicketTypeResponse;
+import com.znaji.event_ticket_platform.application.events.commands.*;
 import com.znaji.event_ticket_platform.common.mapping.events.EventMapper;
 import com.znaji.event_ticket_platform.domain.events.Event;
 import com.znaji.event_ticket_platform.domain.events.TicketType;

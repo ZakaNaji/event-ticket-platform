@@ -1,4 +1,4 @@
-package com.znaji.event_ticket_platform.api.events;
+package com.znaji.event_ticket_platform.api.events.io;
 
 import java.time.LocalDateTime;
 import java.util.List;

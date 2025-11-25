@@ -1,6 +1,6 @@
 package com.znaji.event_ticket_platform.infrastructure.persistence.events;
 
-import com.znaji.event_ticket_platform.api.events.EventFilterCommand;
+import com.znaji.event_ticket_platform.application.events.commands.EventFilterCommand;
 import com.znaji.event_ticket_platform.domain.events.Event;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;

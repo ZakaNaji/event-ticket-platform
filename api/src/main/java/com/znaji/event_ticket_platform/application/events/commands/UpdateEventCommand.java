@@ -1,4 +1,4 @@
-package com.znaji.event_ticket_platform.application.events;
+package com.znaji.event_ticket_platform.application.events.commands;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
