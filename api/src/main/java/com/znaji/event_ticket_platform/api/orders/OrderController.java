@@ -6,14 +6,18 @@ import com.znaji.event_ticket_platform.application.orders.OrderApplicationServic
 import com.znaji.event_ticket_platform.application.orders.commands.CreateOrderCommand;
 import com.znaji.event_ticket_platform.common.mapping.orders.OrderMapper;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/orders")
+@Validated
 public class OrderController {
 
     private final OrderApplicationService orderApplicationService;
@@ -29,5 +33,11 @@ public class OrderController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(order);
+    }
+
+    @PutMapping("/{orderId}/confirm")
+    public ResponseEntity<Void> confirmOrder(@PathVariable @NotNull UUID orderId) {
+        orderApplicationService.confirmOrder(orderId);
+        return ResponseEntity.noContent().build();
     }
 }
