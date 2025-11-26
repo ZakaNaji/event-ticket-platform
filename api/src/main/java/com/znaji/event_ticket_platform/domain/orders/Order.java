@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "orders")
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor
 @Getter @Setter
 public class Order {
 
@@ -29,7 +29,7 @@ public class Order {
     private OrderStatus status;
 
     @Column(name = "total_amount", nullable = false, precision = 10, scale = 2)
-    private BigDecimal totalAmount;
+    private BigDecimal totalAmount = BigDecimal.ZERO;
 
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Getter(AccessLevel.NONE)
@@ -40,13 +40,44 @@ public class Order {
         return List.copyOf(items);
     }
 
-    public void addItem(OrderItem item) {
-        items.add(item);
-        item.setOrder(this);
+
+    //business rules:
+    public static Order createOrder(UUID attendeeId,
+                            UUID eventId,
+                            List<OrderItem> items) {
+        if (items == null || items.isEmpty()) {
+            throw new IllegalArgumentException("Order must contain at least one item");
+        }
+
+        Order newOrder = new Order();
+        newOrder.setEventId(eventId);
+        newOrder.setAttendeeId(attendeeId);
+        newOrder.setStatus(OrderStatus.PENDING);
+
+        for (OrderItem item : items) {
+            newOrder.addItem(item, newOrder);
+        }
+
+        return newOrder;
     }
 
-    public void removeItem(OrderItem item) {
-        items.remove(item);
-        item.setOrder(null);
+    public void addItem(OrderItem item, Order order) {
+        if (item.getQuantity() <= 0) {
+            throw new IllegalArgumentException(String.format("Quantity for item {%s} must be > 0", item.getId()));
+        }
+
+        if (item.getUnitPrice().compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException(String.format("Unit price for item {%s} must be >= 0", item.getId()));
+        }
+
+        BigDecimal subTotal = item.getUnitPrice().multiply(new BigDecimal(item.getQuantity()));
+
+        if (!subTotal.equals(item.getSubTotal())) {
+            throw new IllegalStateException("Item subtotal mismatch");
+        }
+
+        item.setOrder(order);
+        order.items.add(item);
+        order.setTotalAmount(order.getTotalAmount().add(subTotal));
     }
 }
