@@ -9,6 +9,7 @@ import com.znaji.event_ticket_platform.domain.events.EventStatus;
 import com.znaji.event_ticket_platform.domain.events.TicketType;
 import com.znaji.event_ticket_platform.domain.orders.Order;
 import com.znaji.event_ticket_platform.domain.orders.OrderItem;
+import com.znaji.event_ticket_platform.domain.orders.OrderStatus;
 import com.znaji.event_ticket_platform.infrastructure.persistence.events.EventRepository;
 import com.znaji.event_ticket_platform.infrastructure.persistence.events.TicketTypeRepository;
 import com.znaji.event_ticket_platform.infrastructure.persistence.orders.OrderRepository;
@@ -70,6 +71,38 @@ public class OrderApplicationService {
         return orderItems;
     }
 
+    public void confirmOrder(UUID orderId) {
+        Order order = loadOrder(orderId);
+        Event event = loadEvent(order.getEventId());
+
+        if (order.getStatus() != OrderStatus.PENDING) {
+            throw new IllegalStateException("Only pending orders can be confirmed");
+        }
+        if (event.getStatus() != EventStatus.PUBLISHED) {
+            throw new IllegalStateException("");
+        }
+
+        if (event.getStart().isBefore(LocalDateTime.now())) {
+            throw new IllegalStateException("Cannot confirm order: event has already started");
+        }
+
+        for (OrderItem item : order.getItems()) {
+            TicketType ticketType = loadTicketType(item.getTicketTypeId());
+
+            if (!ticketType.getEvent().getId().equals(event.getId())) {
+                throw new IllegalStateException("Ticket type does not belong to this event");
+            }
+
+            ticketType.increaseSoldQuantity(item.getQuantity());//internaly checks availability
+        }
+        order.confirm();
+    }
+
+    private Order loadOrder(UUID orderId) {
+        return orderRepository.findById(orderId)
+                .orElseThrow(() -> new IllegalArgumentException(String.format("Order not found: %s", orderId)));
+    }
+
     private void checkAvailability(TicketType ticketType, int quantity) {
         if (ticketType.getSoldQuantity() + quantity > ticketType.getMaxQuantity()) {
             throw new IllegalStateException("selected Quantity exceeds available %d ticket for type %s"
@@ -86,4 +119,5 @@ public class OrderApplicationService {
         return eventRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(String.format("Event not found: %s", id)));
     }
+
 }

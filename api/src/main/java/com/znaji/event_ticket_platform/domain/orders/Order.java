@@ -80,4 +80,11 @@ public class Order {
         order.items.add(item);
         order.setTotalAmount(order.getTotalAmount().add(subTotal));
     }
+
+    public void confirm() {
+        if (this.status != OrderStatus.PAID) {
+            throw new IllegalStateException("Order cannot be paid from status: " + this.status);
+        }
+        this.status = OrderStatus.PAID;
+    }
 }
