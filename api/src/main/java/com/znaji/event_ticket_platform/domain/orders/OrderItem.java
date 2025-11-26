@@ -12,7 +12,6 @@ import java.util.UUID;
 @Entity
 @Table(name = "order_items")
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
 public class OrderItem {
@@ -40,4 +39,14 @@ public class OrderItem {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
     private Order order;
+
+    public static OrderItem createItem(UUID ticketTypeId, int quantity, BigDecimal price, String name) {
+        OrderItem newItem = new OrderItem();
+        newItem.setTicketTypeId(ticketTypeId);
+        newItem.setTicketTypeName(name);
+        newItem.setQuantity(quantity);
+        newItem.setUnitPrice(price);
+        newItem.setSubTotal(price.multiply(new BigDecimal(quantity)));
+        return newItem;
+    }
 }
