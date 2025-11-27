@@ -52,4 +52,10 @@ public class OrderController {
         orderApplicationService.expireOrder(orderId);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/{orderId}")
+    public ResponseEntity<OrderResponse> getOrderById(@PathVariable @NotNull UUID orderId) {
+        OrderResponse response = orderApplicationService.getOrderById(orderId);
+        return ResponseEntity.ok(response);
+    }
 }

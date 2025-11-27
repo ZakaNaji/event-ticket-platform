@@ -36,6 +36,11 @@ public class OrderApplicationService {
         this.orderRepository = orderRepository;
     }
 
+    public OrderResponse getOrderById(UUID orderId) {
+        Order order = loadOrder(orderId);
+        return OrderMapper.toResponse(order);
+    }
+
     public OrderResponse createOrder(CreateOrderCommand cmd) {
         Event event = loadEvent(cmd.eventId());
 
