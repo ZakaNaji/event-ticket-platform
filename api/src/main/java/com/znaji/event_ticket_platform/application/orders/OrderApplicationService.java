@@ -3,6 +3,7 @@ package com.znaji.event_ticket_platform.application.orders;
 import com.znaji.event_ticket_platform.api.orders.io.OrderResponse;
 import com.znaji.event_ticket_platform.application.orders.commands.CreateOrderCommand;
 import com.znaji.event_ticket_platform.application.orders.commands.CreateOrderItemCommand;
+import com.znaji.event_ticket_platform.application.orders.commands.FilterOrderCommand;
 import com.znaji.event_ticket_platform.common.mapping.orders.OrderMapper;
 import com.znaji.event_ticket_platform.domain.events.Event;
 import com.znaji.event_ticket_platform.domain.events.EventStatus;
@@ -13,7 +14,10 @@ import com.znaji.event_ticket_platform.domain.orders.OrderStatus;
 import com.znaji.event_ticket_platform.infrastructure.persistence.events.EventRepository;
 import com.znaji.event_ticket_platform.infrastructure.persistence.events.TicketTypeRepository;
 import com.znaji.event_ticket_platform.infrastructure.persistence.orders.OrderRepository;
+import com.znaji.event_ticket_platform.infrastructure.persistence.orders.OrderSpecification;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -149,4 +153,14 @@ public class OrderApplicationService {
                 .orElseThrow(() -> new IllegalArgumentException(String.format("Event not found: %s", id)));
     }
 
+    public Page<OrderResponse> filterOrders(FilterOrderCommand command, Pageable pageable) {
+
+        if (command.fromDate() != null && command.toDate() != null) {
+            if (command.fromDate().isAfter(command.toDate())) {
+                throw new IllegalArgumentException("fromDate cannot be after toDate");
+            }
+        }
+        return orderRepository.findAll(OrderSpecification.filterOrder(command), pageable)
+                .map(OrderMapper::toResponse);
+    }
 }

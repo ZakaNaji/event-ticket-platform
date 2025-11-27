@@ -1,6 +1,7 @@
 package com.znaji.event_ticket_platform.api.orders;
 
 import com.znaji.event_ticket_platform.api.orders.io.CreateOrderRequest;
+import com.znaji.event_ticket_platform.api.orders.io.FilterOrderRequest;
 import com.znaji.event_ticket_platform.api.orders.io.OrderResponse;
 import com.znaji.event_ticket_platform.application.orders.OrderApplicationService;
 import com.znaji.event_ticket_platform.application.orders.commands.CreateOrderCommand;
@@ -8,6 +9,8 @@ import com.znaji.event_ticket_platform.common.mapping.orders.OrderMapper;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -57,5 +60,14 @@ public class OrderController {
     public ResponseEntity<OrderResponse> getOrderById(@PathVariable @NotNull UUID orderId) {
         OrderResponse response = orderApplicationService.getOrderById(orderId);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/filter")
+    public ResponseEntity<Page<OrderResponse>> filterOrder(FilterOrderRequest filterOrderRequest,
+                                                          Pageable pageable) {
+
+        Page<OrderResponse> responses = orderApplicationService.filterOrders(OrderMapper.toCommand(filterOrderRequest), pageable);
+
+        return ResponseEntity.ok(responses);
     }
 }
