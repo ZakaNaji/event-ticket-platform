@@ -97,4 +97,13 @@ public class Order {
 
         this.status = OrderStatus.CANCELLED;
     }
+
+    public void expire() {
+        if (this.status != OrderStatus.PENDING) {
+            throw new IllegalStateException(
+                    "Only orders in pending payment status can be expired"
+            );
+        }
+        this.status = OrderStatus.EXPIRED;
+    }
 }
