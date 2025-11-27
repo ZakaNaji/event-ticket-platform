@@ -46,4 +46,10 @@ public class OrderController {
         orderApplicationService.cancelOrder(orderId);
         return ResponseEntity.noContent().build();
     }
+
+    @PutMapping("/{orderId}/expire")
+    public ResponseEntity<Void> expireOrder(@PathVariable @NotNull UUID orderId) {
+        orderApplicationService.expireOrder(orderId);
+        return ResponseEntity.noContent().build();
+    }
 }

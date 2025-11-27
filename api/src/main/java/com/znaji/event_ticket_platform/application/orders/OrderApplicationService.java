@@ -110,6 +110,18 @@ public class OrderApplicationService {
         order.cancel();
     }
 
+    public void expireOrder(UUID orderId) {
+        Order order = loadOrder(orderId);
+        Event event = loadEvent(order.getEventId());
+
+        // Cannot expire after event starts
+        if (event.getStart().isBefore(LocalDateTime.now())) {
+            throw new IllegalStateException("Cannot expire order: event has already started");
+        }
+
+        order.expire();
+    }
+
     private Order loadOrder(UUID orderId) {
         return orderRepository.findById(orderId)
                 .orElseThrow(() -> new IllegalArgumentException(String.format("Order not found: %s", orderId)));
