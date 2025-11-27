@@ -13,6 +13,7 @@ import com.znaji.event_ticket_platform.domain.orders.OrderStatus;
 import com.znaji.event_ticket_platform.infrastructure.persistence.events.EventRepository;
 import com.znaji.event_ticket_platform.infrastructure.persistence.events.TicketTypeRepository;
 import com.znaji.event_ticket_platform.infrastructure.persistence.orders.OrderRepository;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -96,6 +97,17 @@ public class OrderApplicationService {
             ticketType.increaseSoldQuantity(item.getQuantity());//internaly checks availability
         }
         order.confirm();
+    }
+
+    public void cancelOrder(UUID orderId) {
+        Order order = loadOrder(orderId);
+        Event event = loadEvent(order.getEventId());
+
+        // Event should not have started
+        if (event.getStart().isBefore(LocalDateTime.now())) {
+            throw new IllegalStateException("Cannot cancel order: event has already started");
+        }
+        order.cancel();
     }
 
     private Order loadOrder(UUID orderId) {

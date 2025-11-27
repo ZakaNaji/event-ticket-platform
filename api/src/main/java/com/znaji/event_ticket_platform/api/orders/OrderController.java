@@ -40,4 +40,10 @@ public class OrderController {
         orderApplicationService.confirmOrder(orderId);
         return ResponseEntity.noContent().build();
     }
+
+    @PutMapping("/{orderId}/cancel")
+    public ResponseEntity<Void> cancelOrder(@PathVariable @NotNull UUID orderId) {
+        orderApplicationService.cancelOrder(orderId);
+        return ResponseEntity.noContent().build();
+    }
 }

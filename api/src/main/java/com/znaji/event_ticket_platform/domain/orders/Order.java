@@ -87,4 +87,14 @@ public class Order {
         }
         this.status = OrderStatus.PAID;
     }
+
+    public void cancel() {
+        if (this.status != OrderStatus.PENDING) {
+            throw new IllegalStateException(
+                    "Only orders in pending payment status can be cancelled"
+            );
+        }
+
+        this.status = OrderStatus.CANCELLED;
+    }
 }
