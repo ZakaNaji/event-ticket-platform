@@ -1,5 +1,6 @@
 package com.znaji.event_ticket_platform.domain.orders;
 
+import com.znaji.event_ticket_platform.domain.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,7 +13,7 @@ import java.util.UUID;
 @Table(name = "orders")
 @NoArgsConstructor
 @Getter @Setter
-public class Order {
+public class Order extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
