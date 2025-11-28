@@ -24,11 +24,11 @@ public class OrderSpecification {
             }
 
             if (command.fromDate() != null) {
-
+                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("createdAt"), command.fromDate()));
             }
 
-            if (command.fromDate() != null) {
-
+            if (command.toDate() != null) {
+                predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("createdAt"), command.toDate()));
             }
 
             return criteriaBuilder.and(predicates.toArray(Predicate[]::new));
