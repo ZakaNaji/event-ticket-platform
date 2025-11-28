@@ -1,10 +1,12 @@
 package com.znaji.event_ticket_platform.common.mapping.orders;
 
 import com.znaji.event_ticket_platform.api.orders.io.CreateOrderRequest;
+import com.znaji.event_ticket_platform.api.orders.io.FilterOrderRequest;
 import com.znaji.event_ticket_platform.api.orders.io.OrderItemResponse;
 import com.znaji.event_ticket_platform.api.orders.io.OrderResponse;
 import com.znaji.event_ticket_platform.application.orders.commands.CreateOrderCommand;
 import com.znaji.event_ticket_platform.application.orders.commands.CreateOrderItemCommand;
+import com.znaji.event_ticket_platform.application.orders.commands.FilterOrderCommand;
 import com.znaji.event_ticket_platform.domain.orders.Order;
 import com.znaji.event_ticket_platform.domain.orders.OrderItem;
 
@@ -52,6 +54,17 @@ public class OrderMapper {
                 request.attendeeId(),
                 request.eventId(),
                 itemCommands
+        );
+    }
+
+    public static FilterOrderCommand toCommand(FilterOrderRequest request) {
+        if (request == null) return null;
+
+        return new FilterOrderCommand(
+                request.eventId(),
+                request.status(),
+                request.fromDate(),
+                request.toDate()
         );
     }
 }
