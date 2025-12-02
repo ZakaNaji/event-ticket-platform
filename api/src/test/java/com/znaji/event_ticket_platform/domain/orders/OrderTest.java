@@ -42,4 +42,18 @@ class OrderTest {
         assertThrows(IllegalArgumentException.class, () -> Order.createOrder(attendeeId, eventId, List.of()));
     }
 
+
+    @Test
+    void confirmOrder_successful() {
+        Order order = Order.createOrder(
+                UUID.randomUUID(),
+                UUID.randomUUID(),
+                List.of(item(UUID.randomUUID(), 1, new BigDecimal("50.00")))
+        );
+
+        order.confirm();
+
+        assertEquals(order.getStatus(),OrderStatus.PAID);
+    }
+
 }

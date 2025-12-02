@@ -83,7 +83,7 @@ public class Order extends BaseEntity {
     }
 
     public void confirm() {
-        if (this.status != OrderStatus.PAID) {
+        if (this.status != OrderStatus.PENDING) {
             throw new IllegalStateException("Order cannot be paid from status: " + this.status);
         }
         this.status = OrderStatus.PAID;
